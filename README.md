@@ -1,1 +1,1 @@
-# Robofriends, the app where you meet your robofriends!!
+# Robofriends, the place where you meet your robofriends!!
