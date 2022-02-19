@@ -5,44 +5,32 @@ import SearchBox from "../components/SearchBox";
 import './App.css'
 import Scroll from '../components/Scroll'
 import ErrorBoundry from "../components/ErrorBoundry";
-import { setSearchField } from '../actions';
+import { setSearchField, requestRobots } from '../actions';
 
 const mapStateToProps = state => {
   return {
-    searchField: state.searchField
+    searchField: state.searchRobots.searchField,
+    robots: state.requestRobots.robots,
+    isPending: state.requestRobots.isPending,
+    error: state.requestRobots.error
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return { 
-    handleSearch: (event) => dispatch(setSearchField(event.target.value))
+  return {
+    handleSearch: (event) => dispatch(setSearchField(event.target.value)),
+    onRequestRobots: () => dispatch(requestRobots())
   };
 }
 
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: true,
-      robots: [],
-      // searchTerm: '',
-    }
-  }
-
-  /*handleSearch = (event) => {
-    this.setState({ searchTerm: event.target.value })
-  };*/
-
   componentDidMount() {
-    console.log(this.props.store);
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(res => res.json())
-      .then(json => this.setState({ robots: json, isLoading: false }));
+    this.props.onRequestRobots();
   }
 
   render() {
-    const searchedRobots = this.state.robots.filter(robot => {
+    const searchedRobots = this.props.robots.filter(robot => {
       return robot.name.toLowerCase().includes(this.props.searchField.toLowerCase());
     })
 
@@ -51,7 +39,9 @@ class App extends React.Component {
           <h1 className="f1">RoboFriends</h1>
           <SearchBox searchTerm={this.props.searchField} onSearch={this.props.handleSearch}/>
 
-          {this.state.isLoading ? (
+          {this.props.error && <h1>Something went wrong ...</h1>}
+
+          {this.props.isPending ? (
             <h1>Loading...</h1>
           ) : (
             <Scroll>
