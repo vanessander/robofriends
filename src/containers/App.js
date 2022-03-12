@@ -36,7 +36,7 @@ class App extends React.Component {
 
     return (
       <div className="tc">
-          <h1 className="f1">RoboFriends</h1>
+          <h1 className="f1">RoboFriend</h1>
           <SearchBox searchTerm={this.props.searchField} onSearch={this.props.handleSearch}/>
 
           {this.props.error && <h1>Something went wrong ...</h1>}
